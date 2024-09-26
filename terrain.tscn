@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=3 uid="uid://diel7vtghr4bn"]
+
+[ext_resource type="Script" path="res://scripts/terrain.gd" id="1_l2wfj"]
+[ext_resource type="Texture2D" uid="uid://bd2ikop4xof3a" path="res://assets/sprites/map/mesa bad.png" id="2_fi23k"]
+[ext_resource type="Shader" path="res://scene/parent_terrain.gdshader" id="2_viorw"]
+[ext_resource type="Shader" path="res://scene/terrain_background.gdshader" id="2_xbubg"]
+[ext_resource type="Script" path="res://scripts/circle.gd" id="4_m27gq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4pfij"]
+shader = ExtResource("2_xbubg")
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_2utkb"]
+light_mode = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qihk6"]
+shader = ExtResource("2_viorw")
+shader_parameter/ratio = null
+shader_parameter/radius = null
+
+[node name="Terrain" type="Node2D" groups=["destructibles"]]
+script = ExtResource("1_l2wfj")
+
+[node name="Background" type="Sprite2D" parent="."]
+z_index = -30
+z_as_relative = false
+material = SubResource("ShaderMaterial_4pfij")
+position = Vector2(0, 10)
+scale = Vector2(1, 0.981481)
+texture = ExtResource("2_fi23k")
+centered = false
+
+[node name="IslandHolder" type="Node2D" parent="."]
+z_index = 1
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+own_world_3d = true
+transparent_bg = true
+render_target_clear_mode = 1
+render_target_update_mode = 1
+
+[node name="Circle" type="Node2D" parent="SubViewport"]
+visible = false
+material = SubResource("CanvasItemMaterial_2utkb")
+script = ExtResource("4_m27gq")
+
+[node name="ShapeSprite" type="Sprite2D" parent="SubViewport"]
+visible = false
+z_index = -30
+z_as_relative = false
+material = SubResource("ShaderMaterial_qihk6")
+texture = ExtResource("2_fi23k")
+centered = false
