@@ -1,12 +1,12 @@
 [gd_scene load_steps=4 format=3 uid="uid://diel7vtghr4bn"]
 
-[ext_resource type="Script" path="res://main/terrain.gd" id="1_l2wfj"]
-[ext_resource type="Texture2D" uid="uid://orosfl0m37mv" path="res://main/mesa_2.png" id="2_fi23k"]
+[ext_resource type="Script" path="res://main/destructible.gd" id="1_6i8wx"]
+[ext_resource type="Texture2D" uid="uid://orosfl0m37mv" path="res://main/mesa_2.png" id="2_ehgal"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4pfij"]
 
-[node name="Terrain" type="Node2D" groups=["destructibles"]]
-script = ExtResource("1_l2wfj")
+[node name="Destructible" type="Node2D" groups=["destructibles"]]
+script = ExtResource("1_6i8wx")
 
 [node name="Background" type="Sprite2D" parent="."]
 z_index = -30
@@ -14,7 +14,7 @@ z_as_relative = false
 material = SubResource("ShaderMaterial_4pfij")
 position = Vector2(0, 10)
 scale = Vector2(1, 0.981481)
-texture = ExtResource("2_fi23k")
+texture = ExtResource("2_ehgal")
 centered = false
 
 [node name="IslandHolder" type="Node2D" parent="."]
