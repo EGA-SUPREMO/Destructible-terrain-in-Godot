@@ -1,25 +1,18 @@
 extends Node2D
 
+@onready var background: Sprite2D = $Background
 @onready var island_holder = $IslandHolder
-@onready var circle: Node2D = $SubViewport/Circle
-@onready var shape_sprite: Sprite2D = $SubViewport/ShapeSprite
 
 var map_size: Vector2i
-const FORCE_MULTIPLIER_TO_POLYGONS = 500
+#const FORCE_MULTIPLIER_TO_POLYGONS = 500
 
 func _ready() -> void:
 	add_to_group("destructibles")
 	create_collisions()
-	
-	#var _image_republish_texture = ImageTexture.create_from_image(shape_sprite.texture.get_image())
-	
-	shape_sprite.material.set_shader_parameter("destruction_mask", circle)
-	#shape_sprite.material.set_shader_parameter("ratio", float(map_size.x)/map_size.y)
-	
-	
+
 func create_collisions():	
 	var bitMap = BitMap.new()
-	bitMap.create_from_image_alpha(shape_sprite.texture.get_image())
+	bitMap.create_from_image_alpha(background.texture.get_image())
 	
 	var polygons = bitMap.opaque_to_polygons(Rect2(Vector2(0, 0), bitMap.get_size()))
 	
@@ -98,20 +91,20 @@ func clip(missile_polygon: PackedVector2Array):
 				body.global_position = collision_body.position + centroid.rotated(collision_body.rotation)
 				body.contact_monitor = true
 				body.max_contacts_reported = 2
-				body.connect("body_entered", on_collision_polygon.bind(body))
+				#body.connect("body_entered", on_collision_polygon.bind(body))
 				body.mass = abs(calculate_area(collider.polygon))
 				
 				island_holder.call_deferred("add_child", body)
 				body.call_deferred("add_child", collider)
 				body.call_deferred("add_child", polygon_temp)
 				
-func on_collision_polygon(_target_body, _body):
-	if _target_body is CharacterBody2D:
-		# TODO Shouldnt we check if player has velocity zero, if so, it'd mean that is being squished
-		var angular_force = _body.angular_velocity * _body.mass
-		var linear_force = _body.linear_velocity.length() * _body.mass
-		var total_force = angular_force + linear_force# TODO este metodo le falta chicha
-		#print(total_force)
+#func on_collision_polygon(_target_body, _body):
+	#if _target_body is CharacterBody2D:
+		## TODO Shouldnt we check if player has velocity zero, if so, it'd mean that is being squished
+		#var angular_force = _body.angular_velocity * _body.mass
+		#var linear_force = _body.linear_velocity.length() * _body.mass
+		#var total_force = angular_force + linear_force# TODO este metodo le falta chicha
+		##print(total_force)
 
 func create_circle_radious_polygon(circle_position, radius: int) -> PackedVector2Array:
 	var nb_points = 16
@@ -163,13 +156,13 @@ func get_min_x_y(points: PackedVector2Array) -> Vector2:
 			min_y = point.y
 	return Vector2(min_x, min_y)
 
-func apply_explotion_impulse(missile_position: Vector2, force: float) -> void:
-	for collision_body in island_holder.get_children():
-		if collision_body is RigidBody2D:
-			var strength_knockback = Global.calculate_strength_knockback(collision_body.global_position,
-				missile_position, force, collision_body.mass)
-			collision_body.apply_impulse(strength_knockback, Vector2())
+#func apply_explotion_impulse(missile_position: Vector2, force: float) -> void:
+	#for collision_body in island_holder.get_children():
+		#if collision_body is RigidBody2D:
+			#var strength_knockback = Global.calculate_strength_knockback(collision_body.global_position,
+				#missile_position, force, collision_body.mass)
+			#collision_body.apply_impulse(strength_knockback, Vector2())
 
 func destroy(missile) -> void:
 	call_deferred("clip", create_circle_radious_polygon(missile.global_position, missile.damage))
-	apply_explotion_impulse(missile.global_position, missile.damage*FORCE_MULTIPLIER_TO_POLYGONS)
+	#apply_explotion_impulse(missile.global_position, missile.damage*FORCE_MULTIPLIER_TO_POLYGONS)
