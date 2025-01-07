@@ -10,6 +10,10 @@ func _ready() -> void:
 	add_to_group("destructibles")
 	create_collisions()
 
+func _process(delta: float) -> void:
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		clip(create_circle_radious_polygon(get_global_mouse_position(), 50))
+
 func create_collisions():
 	var bitMap = BitMap.new()
 	bitMap.create_from_image_alpha(background.texture.get_image())
