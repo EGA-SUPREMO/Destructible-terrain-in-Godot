@@ -10,7 +10,7 @@ func _ready() -> void:
 	add_to_group("destructibles")
 	create_collisions()
 
-func create_collisions():	
+func create_collisions():
 	var bitMap = BitMap.new()
 	bitMap.create_from_image_alpha(background.texture.get_image())
 	
@@ -53,7 +53,6 @@ func clip(missile_polygon: PackedVector2Array):
 		if res.size() == 0:
 			collision_polygon.get_parent().queue_free()
 			
-		#for i in range(res.size() - 1, -1, -1):#has to go from size to 0, for some reason
 		for i in range(res.size()):
 			var clipped_collision = res[i]
 			# These are awkward single or two-point floaters.
@@ -89,8 +88,8 @@ func clip(missile_polygon: PackedVector2Array):
 				
 				body.rotation = collision_body.rotation
 				body.global_position = collision_body.position + centroid.rotated(collision_body.rotation)
-				body.contact_monitor = true
-				body.max_contacts_reported = 2
+				#body.contact_monitor = true
+				#body.max_contacts_reported = 2
 				#body.connect("body_entered", on_collision_polygon.bind(body))
 				body.mass = abs(calculate_area(collider.polygon))
 				
@@ -106,7 +105,7 @@ func clip(missile_polygon: PackedVector2Array):
 		#var total_force = angular_force + linear_force# TODO este metodo le falta chicha
 		##print(total_force)
 
-func create_circle_radious_polygon(circle_position, radius: int) -> PackedVector2Array:
+func create_circle_radious_polygon(circle_position: Vector2, radius: int) -> PackedVector2Array:
 	var nb_points = 16
 	var points_arc = PackedVector2Array()
 	
@@ -116,6 +115,8 @@ func create_circle_radious_polygon(circle_position, radius: int) -> PackedVector
 		points_arc.push_back(circle_position + Vector2(cos(angle_point), sin(angle_point)) * radius)
 
 	return points_arc
+
+#### UTIL FUNCTIONS
 
 func calculate_area(mesh_vertices: PackedVector2Array) -> float:
 	var result := 0.0
@@ -145,17 +146,6 @@ func offset_polygon_by_center_of_mass(polygon: PackedVector2Array, center_of_mas
 	var offset_polygon = Transform2D(0, -center_of_mass) * polygon
 	return offset_polygon
 
-func get_min_x_y(points: PackedVector2Array) -> Vector2:
-	var min_x = points[0].x
-	var min_y = points[0].y
-
-	for point in points:
-		if point.x < min_x:
-			min_x = point.x
-		if point.y < min_y:
-			min_y = point.y
-	return Vector2(min_x, min_y)
-
 #func apply_explotion_impulse(missile_position: Vector2, force: float) -> void:
 	#for collision_body in island_holder.get_children():
 		#if collision_body is RigidBody2D:
@@ -163,6 +153,6 @@ func get_min_x_y(points: PackedVector2Array) -> Vector2:
 				#missile_position, force, collision_body.mass)
 			#collision_body.apply_impulse(strength_knockback, Vector2())
 
-func destroy(missile) -> void:
-	call_deferred("clip", create_circle_radious_polygon(missile.global_position, missile.damage))
+func destroy(global_position_circle: Vector2, size: int) -> void:
+	call_deferred("clip", create_circle_radious_polygon(global_position_circle, size))
 	#apply_explotion_impulse(missile.global_position, missile.damage*FORCE_MULTIPLIER_TO_POLYGONS)
