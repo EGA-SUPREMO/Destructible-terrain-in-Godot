@@ -23,7 +23,7 @@ The project consist of the following nodes:
 
 the function ~~with its typo xd~~ `create_circle_radious_polygon()` is used to calculate the shape of polygon to be destroyed, the first argument is for the position of circle and the second is for the size, it returns a `PackedVector2Array`, which is required for `clip()`
 
-the function `clip()` is used when we want to remove terrain, it requires a PackedVector2Array. If you don't want the terrain to be affected by physics, change the line
+the function `clip()` is used when we want to remove terrain, it requires a `PackedVector2Array`. If you don't want the terrain to be affected by physics, change the line
 ```gdscript
                var body := RigidBody2D.new()
 ```
