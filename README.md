@@ -35,3 +35,6 @@ and make sure you remove `body.mass = abs(calculate_area(collider.polygon))`, be
 
 * `_process()` can be deleted, its mainly for demonstration purposes
 
+## License
+
+The unlicense license, read LICENSE file
